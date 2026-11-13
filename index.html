@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>청년정책 한눈에 | 나에게 맞는 지원 찾기</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Pretendard', 'Noto Sans KR', sans-serif; color: #1b2a42; background: #f5f8fc; }
+    button, input, select { font: inherit; }
+    button { cursor: pointer; }
+    .wrap { width: min(1080px, calc(100% - 36px)); margin: auto; }
+    header { background: white; border-bottom: 1px solid #e5ebf4; }
+    .top { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 72px; }
+    .brand { font-weight: 850; font-size: 22px; letter-spacing: -.7px; color: #1d4ed8; }
+    .auth { display: flex; align-items: center; gap: 10px; }
+    #userName { font-size: 13px; color: #52657c; }
+    .btn { border: 0; background: #2563eb; color: white; font-weight: 750; padding: 11px 15px; border-radius: 11px; }
+    .btn:hover { filter: brightness(.94); }
+    .btn.secondary { color: #2a508a; background: #eaf1ff; }
+    .btn.outline { background: #fff; border: 1px solid #b8c8e0; color: #2a508a; }
+    .hero { background: linear-gradient(120deg, #1744a7, #377ced); color: white; padding: 50px 0 55px; }
+    .hero h1 { margin: 0 0 12px; font-size: clamp(26px, 4vw, 36px); letter-spacing: -1px; }
+    .hero p { margin: 0; line-height: 1.7; color: #e7efff; }
+    .stats { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
+    .stat { padding: 12px 18px; background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.18); border-radius: 13px; }
+    .stat strong { margin-left: 6px; font-size: 19px; }
+    main { padding: 28px 0 65px; }
+    .panel { background: #fff; padding: 22px; border: 1px solid #e2eaf5; border-radius: 18px; box-shadow: 0 5px 22px rgba(31,63,112,.045); }
+    .panel h2 { margin: 0 0 16px; font-size: 19px; }
+    .filters { display: grid; grid-template-columns: 2fr 1fr 1fr .75fr; gap: 12px; }
+    label { display: block; color: #4f627b; font-weight: 750; font-size: 13px; margin-bottom: 7px; }
+    input, select { width: 100%; border: 1px solid #cdd9e9; border-radius: 10px; padding: 11px 12px; background: #fff; color: #1b2a42; }
+    input:focus, select:focus { outline: 2px solid #9ac0ff; border-color: #3b82f6; }
+    .filter-footer { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-top: 15px; flex-wrap: wrap; }
+    .muted { color: #64748b; font-size: 13px; }
+    .notice { background: #fff8e8; border: 1px solid #f3dca6; border-radius: 12px; color: #805415; padding: 14px 16px; margin: 20px 0; font-size: 14px; line-height: 1.6; }
+    #status { min-height: 23px; margin-top: 12px; color: #375a8a; font-size: 13px; }
+    .heading { display: flex; gap: 12px; justify-content: space-between; align-items: center; margin: 24px 0 15px; }
+    .heading h2 { margin: 0; font-size: 21px; }
+    .cards { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 16px; }
+    .card { background: white; border-radius: 17px; border: 1px solid #e0e8f5; padding: 20px; display: flex; flex-direction: column; gap: 11px; box-shadow: 0 5px 15px rgba(22,48,91,.035); }
+    .chips { display: flex; gap: 7px; flex-wrap: wrap; }
+    .chip { background: #eaf1ff; color: #285cae; border-radius: 999px; padding: 5px 10px; font-size: 12px; font-weight: 750; }
+    .chip.deadline { background: #fff0dc; color: #a3560a; }
+    .card h3 { font-size: 19px; margin: 3px 0 0; line-height: 1.4; }
+    .card p { color: #5c6f86; line-height: 1.65; margin: 0; font-size: 14px; }
+    .details { color: #566980; font-size: 13px; margin-top: auto; padding-top: 7px; }
+    .actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 2px; }
+    .actions a { display: inline-flex; align-items: center; text-decoration: none; }
+    .empty { text-align: center; padding: 38px; color: #728197; background: white; border: 1px dashed #c6d4e6; border-radius: 15px; grid-column: 1 / -1; }
+    footer { text-align: center; color: #8390a3; padding: 24px 10px; font-size: 12px; }
+    @media (max-width: 760px) { .filters { grid-template-columns: repeat(2, minmax(0,1fr)); } .cards { grid-template-columns: 1fr; } .hero { padding: 36px 0; } .brand { font-size: 18px; } }
+    @media (max-width: 420px) { .filters { grid-template-columns: 1fr; } .top { align-items: flex-start; padding: 14px 0; flex-direction: column; } }
+  </style>
+</head>
+<body>
+  <header><div class="wrap top">
+    <div class="brand">청년정책 한눈에</div>
+    <div class="auth">
+      <span id="userName">로그인 전</span>
+      <button class="btn" id="loginBtn" type="button">Google 로그인</button>
+      <button class="btn secondary" id="logoutBtn" type="button" hidden>로그아웃</button>
+    </div>
+  </div></header>
+  <section class="hero"><div class="wrap">
+    <h1>나에게 맞는 청년 지원정책을 찾아보세요</h1>
+    <p>지역과 관심 분야를 선택하고, 필요한 정책을 찜해 한곳에 모아보세요.</p>
+    <div class="stats">
+      <div class="stat">조회한 정책 <strong id="totalCount">0</strong></div>
+      <div class="stat">검색 결과 <strong id="resultCount">0</strong></div>
+      <div class="stat">내 찜 목록 <strong id="savedCount">0</strong></div>
+    </div>
+  </div></section>
+  <main class="wrap">
+    <section class="panel">
+      <h2>맞춤 정책 검색</h2>
+      <div class="filters">
+        <div><label for="search">검색어</label><input id="search" placeholder="정책명 또는 키워드"></div>
+        <div><label for="region">지역</label><select id="region">
+          <option value="전체">전체 지역</option><option value="서울">서울</option><option value="경기">경기</option>
+          <option value="인천">인천</option><option value="부산">부산</option><option value="대구">대구</option>
+          <option value="광주">광주</option><option value="대전">대전</option><option value="울산">울산</option>
+          <option value="세종">세종</option><option value="강원">강원</option><option value="충북">충북</option>
+          <option value="충남">충남</option><option value="전북">전북</option><option value="전남">전남</option>
+          <option value="경북">경북</option><option value="경남">경남</option><option value="제주">제주</option>
+        </select></div>
+        <div><label for="category">관심 분야</label><select id="category">
+          <option value="전체">전체 분야</option><option value="취업">취업</option><option value="교육">교육</option>
+          <option value="주거">주거</option><option value="창업">창업</option><option value="복지">복지</option>
+        </select></div>
+        <div><label for="age">나이 (선택)</label><input id="age" type="number" min="15" max="100" placeholder="예: 23"></div>
+      </div>
+      <div class="filter-footer">
+        <span class="muted">로그인하면 검색 조건과 찜 목록을 Firebase에 저장할 수 있어요.</span>
+        <button type="button" class="btn" id="savePrefsBtn">내 검색 조건 저장</button>
+      </div>
+      <div id="status" role="status" aria-live="polite"></div>
+    </section>
+    <div class="notice" id="demoNotice">현재는 <strong>가상 예시 정책 데이터</strong>를 보여주고 있어요. 실제 지원사업이나 신청 기간이 아니며, API 승인 후 Firestore에 수집된 실제 정책으로 교체할 예정이에요.</div>
+    <div class="heading"><h2 id="listTitle">전체 정책</h2><button type="button" class="btn outline" id="savedOnlyBtn">찜한 정책만 보기</button></div>
+    <section class="cards" id="cards" aria-label="정책 목록"></section>
+  </main>
+  <footer>청년정책 한눈에 · 학습용 웹앱 · 실제 지원 조건은 반드시 공식 공고에서 확인하세요.</footer>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-app.js";
+    import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-auth.js";
+    import { getFirestore, collection, doc, getDoc, getDocs, setDoc, deleteDoc, query, limit, serverTimestamp } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-firestore.js";
+
+    // ★ Firebase 콘솔에서 복사한 웹앱 설정값으로 6개 항목을 바꿔 주세요.
+    const firebaseConfig = {
+      apiKey: "AIzaSyBgMrj38UvjLxJ7Ra8Mr3uCyIBnSUKTi8U",
+      authDomain: "youth-policy-dashboard.firebaseapp.com",
+      projectId: "youth-policy-dashboard",
+      storageBucket: "youth-policy-dashboard.firebasestorage.app",
+      messagingSenderId: "294829250343",
+      appId: "1:294829250343:web:c131ef6f025d6717b5fb02"
+    };
+
+    const $ = (id) => document.getElementById(id);
+    const deadlineAfter = (days) => {
+      const date = new Date();
+      date.setDate(date.getDate() + days);
+      return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2,"0")}-${String(date.getDate()).padStart(2,"0")}`;
+    };
+    // 모두 실제 정책이 아닌 테스트용 가상 데이터입니다.
+    const demoPolicies = [
+      { id: "demo-job-01", title: "[가상] 청년 취업 준비 지원", region: "전국", category: "취업", minAge: 19, maxAge: 34, deadline: deadlineAfter(12), summary: "취업 준비 활동을 지원하는 정책 예시입니다.", link: "" },
+      { id: "demo-home-01", title: "[가상] 경기도 청년 월세 지원", region: "경기", category: "주거", minAge: 19, maxAge: 39, deadline: deadlineAfter(25), summary: "주거비 지원 조건을 확인하는 화면 예시입니다.", link: "" },
+      { id: "demo-study-01", title: "[가상] 서울 청년 역량 강화 교육", region: "서울", category: "교육", minAge: 18, maxAge: 34, deadline: deadlineAfter(5), summary: "교육·자격증 관련 지원정책을 보여주는 예시입니다.", link: "" },
+      { id: "demo-start-01", title: "[가상] 예비 창업자 지원 프로그램", region: "전국", category: "창업", minAge: 18, maxAge: 39, deadline: deadlineAfter(30), summary: "창업 멘토링과 사업화 지원의 가상 예시입니다.", link: "" }
+    ];
+
+    let db, auth, currentUser = null, policies = [], bookmarks = new Map();
+    let savedOnly = false;
+    const showStatus = (message) => { $("status").textContent = message; };
+    const prettyError = (error) => {
+      if (error.code === "auth/unauthorized-domain") return "Firebase Authentication의 승인된 도메인에 GitHub Pages 주소를 추가해야 해요.";
+      if (error.code === "auth/popup-closed-by-user") return "로그인 창이 닫혔어요. 다시 시도해 주세요.";
+      if (error.code === "permission-denied") return "Firestore 보안 규칙 때문에 접근할 수 없어요.";
+      return error.message || String(error);
+    };
+    const daysLeft = (dateString) => {
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(dateString || "")) return null;
+      const end = new Date(`${dateString}T23:59:59`);
+      if (Number.isNaN(end.getTime())) return null;
+      return Math.ceil((end - new Date()) / 86400000);
+    };
+
+    function makeCard(p) {
+      const card = document.createElement("article");
+      card.className = "card";
+      const chips = document.createElement("div"); chips.className = "chips";
+      for (const value of [p.region || "지역 미정", p.category || "기타"]) {
+        const chip = document.createElement("span"); chip.className = "chip"; chip.textContent = value; chips.appendChild(chip);
+      }
+      const left = daysLeft(p.deadline);
+      if (left !== null) {
+        const badge = document.createElement("span"); badge.className = "chip deadline";
+        badge.textContent = left < 0 ? "마감" : left === 0 ? "오늘 마감" : `마감 D-${left}`;
+        chips.appendChild(badge);
+      }
+      const title = document.createElement("h3"); title.textContent = p.title || "제목 없음";
+      const summary = document.createElement("p"); summary.textContent = p.summary || "상세 설명은 공식 공고를 확인해 주세요.";
+      const details = document.createElement("div"); details.className = "details";
+      details.textContent = `대상 연령: ${p.minAge ?? "제한 없음"} ~ ${p.maxAge ?? "제한 없음"}세 · 마감일: ${p.deadline || "별도 확인"}`;
+      const actions = document.createElement("div"); actions.className = "actions";
+      const saveButton = document.createElement("button"); saveButton.className = "btn secondary";
+      saveButton.textContent = bookmarks.has(p.id) ? "♥ 찜 취소" : "♡ 찜하기";
+      saveButton.onclick = async () => {
+        if (!currentUser) return showStatus("찜하려면 먼저 Google 로그인을 해 주세요.");
+        saveButton.disabled = true;
+        try {
+          const ref = doc(db, "users", currentUser.uid, "bookmarks", p.id);
+          if (bookmarks.has(p.id)) { await deleteDoc(ref); bookmarks.delete(p.id); showStatus("찜을 취소했어요."); }
+          else {
+            const { id, title, region, category, minAge, maxAge, deadline, summary, link } = p;
+            await setDoc(ref, { title, region, category, minAge: minAge ?? null, maxAge: maxAge ?? null, deadline: deadline || "", summary: summary || "", link: link || "", savedAt: serverTimestamp() });
+            bookmarks.set(id, p); showStatus("찜한 정책을 Firestore에 저장했어요.");
+          }
+          render();
+        } catch (error) { showStatus(`저장 오류: ${prettyError(error)}`); saveButton.disabled = false; }
+      };
+      actions.appendChild(saveButton);
+      if (p.link && /^https:\/\//i.test(p.link)) {
+        const a = document.createElement("a"); a.className = "btn outline";
+        a.textContent = "공식 공고 확인"; a.href = p.link; a.target = "_blank"; a.rel = "noopener noreferrer";
+        actions.appendChild(a);
+      }
+      card.append(chips, title, summary, details, actions);
+      return card;
+    }
+
+    function render() {
+      const word = $("search").value.trim().toLowerCase();
+      const region = $("region").value, category = $("category").value;
+      const age = Number($("age").value) || null;
+      const source = savedOnly ? [...bookmarks.values()] : policies;
+      const filtered = source.filter((p) => {
+        const matchWord = `${p.title} ${p.summary}`.toLowerCase().includes(word);
+        const matchRegion = region === "전체" || p.region === region || p.region === "전국";
+        const matchCategory = category === "전체" || p.category === category;
+        const matchAge = !age || ((p.minAge == null || age >= Number(p.minAge)) && (p.maxAge == null || age <= Number(p.maxAge)));
+        return matchWord && matchRegion && matchCategory && matchAge;
+      });
+      $("totalCount").textContent = policies.length;
+      $("resultCount").textContent = filtered.length;
+      $("savedCount").textContent = bookmarks.size;
+      $("listTitle").textContent = savedOnly ? "내가 찜한 정책" : "전체 정책";
+      $("savedOnlyBtn").textContent = savedOnly ? "전체 정책 보기" : "찜한 정책만 보기";
+      $("cards").replaceChildren();
+      if (filtered.length === 0) {
+        const empty = document.createElement("div"); empty.className = "empty";
+        empty.textContent = savedOnly ? "찜한 정책이 없거나 검색 조건에 맞지 않아요." : "검색 조건에 맞는 정책이 없어요.";
+        $("cards").appendChild(empty);
+      } else filtered.forEach((p) => $("cards").appendChild(makeCard(p)));
+    }
+
+    async function loadPolicies() {
+      try {
+        const snapshot = await getDocs(query(collection(db, "policies"), limit(100)));
+        if (snapshot.empty) {
+          policies = demoPolicies;
+          $("demoNotice").hidden = false;
+        } else {
+          policies = snapshot.docs.map((d) => ({ ...d.data(), id: d.id }));
+          $("demoNotice").hidden = true;
+        }
+      } catch (error) {
+        policies = demoPolicies;
+        $("demoNotice").hidden = false;
+        showStatus(`정책 조회 오류: ${prettyError(error)} · 임시 예시 데이터를 표시하고 있어요.`);
+      }
+      render();
+    }
+    async function loadUserData(user) {
+      const uid = user.uid;
+      const [profile, saved] = await Promise.all([
+        getDoc(doc(db, "users", uid)),
+        getDocs(collection(db, "users", uid, "bookmarks"))
+      ]);
+      if (auth.currentUser?.uid !== uid) return;
+      if (profile.exists()) {
+        const data = profile.data();
+        $("region").value = data.region || "전체";
+        $("category").value = data.category || "전체";
+        $("age").value = data.age ?? "";
+      }
+      bookmarks = new Map(saved.docs.map((d) => [d.id, { ...d.data(), id: d.id }]));
+      render();
+    }
+
+    async function start() {
+      if (firebaseConfig.apiKey.startsWith("여기에_")) {
+        policies = demoPolicies; render();
+        showStatus("아직 Firebase 설정값을 입력하지 않았어요. 코드의 firebaseConfig 6개 값을 바꿔 주세요.");
+        return;
+      }
+      const app = initializeApp(firebaseConfig);
+      auth = getAuth(app); db = getFirestore(app);
+      for (const id of ["search", "age"]) $(id).addEventListener("input", render);
+      for (const id of ["region", "category"]) $(id).addEventListener("change", render);
+      $("savedOnlyBtn").onclick = () => { savedOnly = !savedOnly; render(); };
+      $("loginBtn").onclick = async () => {
+        try { await signInWithPopup(auth, new GoogleAuthProvider()); }
+        catch (error) { showStatus(`로그인 오류: ${prettyError(error)}`); }
+      };
+      $("logoutBtn").onclick = async () => {
+        try { await signOut(auth); showStatus("로그아웃했어요."); }
+        catch (error) { showStatus(`로그아웃 오류: ${prettyError(error)}`); }
+      };
+      $("savePrefsBtn").onclick = async () => {
+        if (!currentUser) return showStatus("검색 조건을 저장하려면 먼저 로그인해 주세요.");
+        const age = $("age").value === "" ? null : Number($("age").value);
+        if (age !== null && (!Number.isInteger(age) || age < 15 || age > 100)) return showStatus("나이는 15~100 사이의 정수로 입력해 주세요.");
+        try {
+          await setDoc(doc(db, "users", currentUser.uid), {
+            region: $("region").value, category: $("category").value, age,
+            updatedAt: serverTimestamp()
+          }, { merge: true });
+          showStatus("검색 조건을 Firestore에 저장했어요.");
+        } catch (error) { showStatus(`저장 오류: ${prettyError(error)}`); }
+      };
+      onAuthStateChanged(auth, async (user) => {
+        currentUser = user;
+        $("userName").textContent = user ? `${user.displayName || "사용자"}님` : "로그인 전";
+        $("loginBtn").hidden = !!user;
+        $("logoutBtn").hidden = !user;
+        if (user) {
+          try { await loadUserData(user); showStatus("Google 로그인 성공! 찜하기와 검색 조건 저장을 사용할 수 있어요."); }
+          catch (error) { showStatus(`사용자 정보 조회 오류: ${prettyError(error)}`); }
+        } else { bookmarks.clear(); savedOnly = false; render(); }
+      });
+      await loadPolicies();
+    }
+    start().catch((error) => showStatus(`초기화 오류: ${prettyError(error)}`));
+  </script>
+</body>
+</html>
