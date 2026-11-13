@@ -1,0 +1,12 @@
+
+{
+  "name": "youth-policy-dashboard-sync",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "sync": "node scripts/sync-policies.cjs"
+  },
+  "dependencies": {
+    "firebase-admin": "14.5.0"
+  }
+}
